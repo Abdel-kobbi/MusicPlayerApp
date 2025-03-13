@@ -43,6 +43,25 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.seekTo(0);
         mediaPlayer.setVolume(0.5f, 0.5f);
 
+        seekBarVolume.setProgress(50);
+
+        seekBarVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float volume = progress / 100f;
+                mediaPlayer.setVolume(volume, volume);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         btnPlay.setOnClickListener(v -> {
             if (mediaPlayer.isPlaying()) {
