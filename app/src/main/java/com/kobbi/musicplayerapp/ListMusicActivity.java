@@ -1,6 +1,7 @@
 package com.kobbi.musicplayerapp;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -57,6 +58,12 @@ public class ListMusicActivity extends AppCompatActivity {
             // we have permission to read from external storage
             getSongs();
         }
+
+        lvSongs.setOnItemClickListener((parent, view, position, id) -> {
+            Intent openMusicPlayer = new Intent(getApplicationContext(), MainActivity.class);
+            openMusicPlayer.putExtra("music", songList.get(position));
+            startActivity(openMusicPlayer);
+        });
 
     }
 
