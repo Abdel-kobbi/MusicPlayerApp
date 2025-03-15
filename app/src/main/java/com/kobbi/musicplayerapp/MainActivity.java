@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         mediaPlayer.seekTo(0);
         mediaPlayer.setVolume(0.5f, 0.5f);
 
-        String duration = millisecondToString(mediaPlayer.getDuration());
-        tvDuration.setText(duration);
+        String durationOfMusic = millisecondToString(mediaPlayer.getDuration());
+        tvDuration.setText(durationOfMusic);
 
         seekBarVolume.setProgress(50);
 
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         seekBarTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser){
+                if (fromUser) {
                     mediaPlayer.seekTo(progress);
                     seekBarTime.setProgress(progress);
                 }
@@ -98,6 +97,23 @@ public class MainActivity extends AppCompatActivity {
                 btnPlay.setBackgroundResource(R.mipmap.ic_pause);
             }
         });
+
+        new Thread(() -> {
+            while (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    try {
+                        final int current = mediaPlayer.getCurrentPosition();
+                        runOnUiThread(() -> {
+                            tvTime.setText(millisecondToString(current));
+                            seekBarTime.setProgress(current);
+                        });
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
 
     }
 
